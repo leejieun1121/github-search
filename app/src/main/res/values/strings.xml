@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GithubSearchApp</string>
+    <string name="hint">"Search"</string>
 </resources>
