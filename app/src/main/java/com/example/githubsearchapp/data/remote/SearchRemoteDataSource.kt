@@ -7,6 +7,6 @@ import javax.inject.Singleton
 @Singleton
 class SearchRemoteDataSource @Inject constructor(private val service: SearchService) {
 
-    fun getRepoList(query: String, perPage: Int, page: Int) =
+    suspend fun getRepoList(query: String, perPage: Int, page: Int) =
         service.getRepositories(query, perPage, page)
 }

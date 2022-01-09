@@ -16,16 +16,19 @@ class SearchPagingSource(
 ) : PagingSource<Int, Repo>() {
 
     companion object {
-        private const val TAG = "ImagePagingSource"
+        private const val TAG = "SearchPagingSource"
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         val position = params.key ?:STARTING_PAGE_INDEX
         return try {
+            val repos = remote.getRepoList(query, position, params.loadSize).items
+            Log.d("결과값쿼리2", query)
+            Log.d("결과값체크", repos.toString())
             LoadResult.Page(
-                data = remote.getRepoList(query,params.loadSize,position).items,
+                data = repos,
                 prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
-                nextKey = position + 1
+                nextKey = if (repos.isEmpty()) null else position + 1
             )
         } catch (e: IOException) {
             Log.e(TAG, "IOException occurred", e)
@@ -34,7 +37,7 @@ class SearchPagingSource(
             Log.e(TAG, "HTTPException occurred", e)
             return LoadResult.Error(e)
         } catch (e: Exception) {
-            Log.e(TAG, "Failed to load stories", e)
+            Log.e(TAG, "Failed to load repositories", e)
             LoadResult.Error(e)
         }
     }
