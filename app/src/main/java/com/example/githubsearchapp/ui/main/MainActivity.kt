@@ -1,8 +1,10 @@
 package com.example.githubsearchapp.ui.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -25,6 +27,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var imm:InputMethodManager
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var mainPagingAdapter: MainPagingAdapter
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         mainPagingAdapter = MainPagingAdapter()
         setupViews()
     }
@@ -43,7 +47,12 @@ class MainActivity : AppCompatActivity() {
             footer = LoadStateAdapter { mainPagingAdapter.retry() }
         )
         mainPagingAdapter.addLoadStateListener { loadState ->
-            binding.tvNothing.isVisible = loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0
+            if(loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0){
+                binding.tvNothing.isVisible = true
+            }else{
+                binding.tvNothing.isVisible = false
+                imm.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
+            }
         }
 
         val editTextObservable = Observable.create { emitter: ObservableEmitter<String>? ->
