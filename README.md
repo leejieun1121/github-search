@@ -144,4 +144,4 @@ com.example.githubsearchapp
 
 ## 📱 Result
 
-![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/53978090/148769607-01f23efc-84e6-49b3-8213-a96b46cf5d38.gif)
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/53978090/148770891-c718aa8a-88b3-43e1-8322-f59ade811f40.gif)
