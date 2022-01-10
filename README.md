@@ -72,33 +72,33 @@ com.example.githubsearchapp
 
   - remote
 
-    - SearchRemoteDataSource
+    - `SearchRemoteDataSource`
 
        service의 getSearchRepos 함수를 호출합니다. 
 
   - repository
 
-    - SearchRepository
+    - `SearchRepository`
 
       SearchPagingSource 를 통해 얻은 Pager 객체를 flow로 바꿔 return 합니다.    
 
   - vo
 
-    - SearchResponse
+    - `SearchResponse`
 
       전체 레포지토리 수와 레포지토리 리스트를 가지고 있습니다.
 
-    - Repo
+    - `Repo`
 
       id, 이름, 레포지토리 작성자, 설명, star 개수, 사용된 언어를 가지고 있습니다. 
 
-    - Owner
+    - `Owner`
 
       이름과 프로필 이미지를 가지고 있습니다. 
 
 - **di** 
 
-  - ServiceModule
+  - `ServiceModule`
 
     Retrofit객체를 만들어 SearchRemoteDataSource에 넣어줍니다. 
 
@@ -106,11 +106,11 @@ com.example.githubsearchapp
 
   - service
 
-    - SearchService
+    - `SearchService`
 
       검색 API가 있습니다. 
 
-  - SearchRetrofit
+  - `SearchRetrofi`t
 
     레트로핏 빌더를 사용하여 Service를 create하는 함수가 있습니다. 
 
@@ -118,21 +118,21 @@ com.example.githubsearchapp
 
   - main
 
-    - MainActivity
+    - `MainActivity`
 
       editText의 TextWatcher를 사용해서 값을 입력할때마다 Observable의 onNext로 발행합니다. (debounce를 사용해서 500ms내에 발생한 마지막 데이터로 제한합니다.) 
 
       새로운 검색 쿼리를 입력하면 맨위로 scroll 됩니다. 그리고 검색 결과를 스크롤 할때 키보드가 hide되며 editText의 focus를 clear해줍니다.  
 
-    - MainPagingAdapter
+    - `MainPagingAdapter`
 
       넘겨받은 PagingData들을 item_main 레이아웃에 set해줍니다. 
 
-    - MainViewModel
+    - `MainViewModel`
 
       repository에서 호출한 레포지토리 리스트 결과값을 Flow로 retrun합니다. 
 
-    - LoadStateAdapter & LoadStateViewHolder
+    - `LoadStateAdapter & LoadStateViewHolder`
 
       다음 페이지의 리스트를 가져올 때 맨 밑바닥에서 LoadState에 따라 결과를 보여줍니다.
 
