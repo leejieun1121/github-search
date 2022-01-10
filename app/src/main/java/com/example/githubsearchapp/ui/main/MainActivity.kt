@@ -3,9 +3,9 @@ package com.example.githubsearchapp.ui.main
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableEmitter
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         mainPagingAdapter = MainPagingAdapter()
         setupViews()
     }
@@ -40,13 +42,10 @@ class MainActivity : AppCompatActivity() {
         binding.rvMain.adapter = mainPagingAdapter.withLoadStateFooter(
             footer = LoadStateAdapter { mainPagingAdapter.retry() }
         )
-        val deleteKeyObservable = Observable.create { emitter: ObservableEmitter<String>? ->
-            binding.etSearch.setOnKeyListener { _, keyCode, _ ->
-                if (keyCode == KeyEvent.KEYCODE_DEL)
-                    emitter?.onNext(binding.etSearch.text.toString())
-                false
-            }
+        mainPagingAdapter.addLoadStateListener { loadState ->
+            binding.tvNothing.isVisible = loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0
         }
+
         val editTextObservable = Observable.create { emitter: ObservableEmitter<String>? ->
             binding.etSearch.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
@@ -60,9 +59,8 @@ class MainActivity : AppCompatActivity() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (s.toString().isEmpty()) {
                         mainPagingAdapter.submitData(lifecycle, PagingData.empty())
-                    } else {
-                        emitter?.onNext(s.toString())
                     }
+                    emitter?.onNext(s.toString())
                 }
 
                 override fun afterTextChanged(s: Editable?) {
@@ -72,7 +70,6 @@ class MainActivity : AppCompatActivity() {
             .subscribeOn(Schedulers.io())
 
         editTextObservable.subscribe { query -> search(query) }
-        deleteKeyObservable.subscribe { query -> search(query) }
     }
 
     private fun search(query: String) {
@@ -84,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.getRepoList(query).collect {
+            viewModel.getRepoList(query).collectLatest {
                 mainPagingAdapter.submitData(it)
             }
         }

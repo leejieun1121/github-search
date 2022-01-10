@@ -33,4 +33,18 @@
         app:layout_constraintTop_toBottomOf="@id/et_search"
         tools:listitem="@layout/item_main" />
 
+    <TextView
+        android:id="@+id/tv_nothing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nothing"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/nothing" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

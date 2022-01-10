@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface SearchService {
     @GET("search/repositories")
-    suspend fun getRepositories(
+    suspend fun getSearchRepos(
         @Query("q") query: String,
         @Query("page") page: Int,
         @Query("per_page") perPage: Int,

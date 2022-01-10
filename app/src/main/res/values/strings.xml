@@ -2,4 +2,5 @@
     <string name="app_name">GithubSearchApp</string>
     <string name="hint">Search</string>
     <string name="retry">RETRY</string>
+    <string name="nothing">검색 결과가 없습니다!</string>
 </resources>

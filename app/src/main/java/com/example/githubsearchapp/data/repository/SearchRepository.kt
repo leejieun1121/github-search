@@ -18,7 +18,7 @@ class SearchRepository @Inject constructor(
         private const val PAGE_SIZE = 10
     }
 
-    fun getRepoList(query: String): Flow<PagingData<Repo>> =
+    fun getSearchRepos(query: String): Flow<PagingData<Repo>> =
         Pager(PagingConfig(PAGE_SIZE)){
             SearchPagingSource(query,remote)
         }.flow

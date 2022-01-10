@@ -22,9 +22,7 @@ class SearchPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         val position = params.key ?:STARTING_PAGE_INDEX
         return try {
-            val repos = remote.getRepoList(query, position, params.loadSize).items
-            Log.d("결과값쿼리2", query)
-            Log.d("결과값체크", repos.toString())
+            val repos = remote.getSearchRepos(query, position, params.loadSize).items
             LoadResult.Page(
                 data = repos,
                 prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,

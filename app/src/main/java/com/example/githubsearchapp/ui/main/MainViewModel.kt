@@ -15,9 +15,7 @@ class MainViewModel @Inject constructor(
     private val searchRepository: SearchRepository,
 ) : ViewModel() {
 
-    fun getRepoList(query: String): Flow<PagingData<Repo>> {
-        return searchRepository.getRepoList(query)
+    fun getRepoList(query: String): Flow<PagingData<Repo>> =
+        searchRepository.getSearchRepos(query)
             .cachedIn(viewModelScope)
-    }
-
 }
