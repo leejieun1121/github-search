@@ -1,28 +1,12 @@
 # github-search
-
-## 🗒 Table of Contents
-
-- [Introduction](#Introduction)
-
-- [Tech stack](#Tech stack)
-
-- [Third party](#Third party)
-
-- [Project Structure](#Project Structure)
-
-- [Result](#Result)
-
   
+## 🔎 Introduction
 
-### 🔎 Introduction
-
----
 
 [Github Search API](https://docs.github.com/en/rest/reference/search#search-repositories) 를 사용해서 검색된 레포지토리 리스트를 보여줍니다. EditText에서 텍스트를 입력하면 검색 API를 호출하고, debounce를 사용해서 호출 간격을 조절했습니다. 각 레포지토리는 유저프로필, 레포지토리 이름, 설명, 받은 star개수, 사용된 언어를 보여줍니다. 
 
-### ⚔️ Tech stack
+## ⚔️ Tech stack
 
----
 
 - Kotlin
 
@@ -34,9 +18,7 @@
 
   
 
----
-
-### 📎 Third party
+## 📎 Third party
 
 - Retrofit2
 
@@ -44,10 +26,7 @@
 
   
 
-### 🗂 Project Structure
-
----
-
+## 🗂 Project Structure
 
 
 ~~~
@@ -163,8 +142,7 @@ com.example.githubsearchapp
 
   
 
-### 📱 Result
+## 📱 Result
 
----
 
 https://user-images.githubusercontent.com/53978090/148752729-abc9706f-c37a-42ae-8cfd-bd3bf757e170.mov
