@@ -66,7 +66,7 @@ com.example.githubsearchapp
 
   - paging
 
-    - SearchPagingSource
+    - `SearchPagingSource`
 
       입력된 쿼리를 통해 레포지토리를 검색하는 API를 호출합니다.  10개의 데이터를 가져온 뒤 스크롤하면 position을 증가시켜서 다시 호출하고, LoadResult.Page 객체로 return합니다. 
 
