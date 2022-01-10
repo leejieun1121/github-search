@@ -138,7 +138,7 @@ com.example.githubsearchapp
 
       로드중 -> Progressbar(로드 중인 상태 표시)
 
----
+
 
 
 ## 📱 Result
