@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import com.example.githubsearchapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +15,8 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableEmitter
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -34,7 +37,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        binding.rvMain.adapter = mainPagingAdapter
+        binding.rvMain.adapter = mainPagingAdapter.withLoadStateFooter(
+            footer = LoadStateAdapter { mainPagingAdapter.retry() }
+        )
         val deleteKeyObservable = Observable.create { emitter: ObservableEmitter<String>? ->
             binding.etSearch.setOnKeyListener { _, keyCode, _ ->
                 if (keyCode == KeyEvent.KEYCODE_DEL)
@@ -72,10 +77,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun search(query: String) {
         lifecycleScope.launch {
+            mainPagingAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { binding.rvMain.scrollToPosition(0) }
+        }
+
+        lifecycleScope.launch {
             viewModel.getRepoList(query).collect {
                 mainPagingAdapter.submitData(it)
             }
         }
     }
-
 }
