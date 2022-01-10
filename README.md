@@ -60,6 +60,8 @@ com.example.githubsearchapp
 
 
 
+
+
 - **data**   
 
   - paging
@@ -122,9 +124,9 @@ com.example.githubsearchapp
 
       새로운 검색 쿼리를 입력하면 맨위로 scroll되고, 검색결과가 나타나면 키보드가 내려줍니다. 
 
-      MainPagingAdapter
+    - MainPagingAdapter
 
-    - 넘겨받은 PagingData들을 item_main 레이아웃에 set해줍니다. 
+      넘겨받은 PagingData들을 item_main 레이아웃에 set해줍니다. 
 
     - MainViewModel
 
@@ -137,7 +139,6 @@ com.example.githubsearchapp
       에러 -> TextView(에러 내용 표시), Button(Retry() 호출) 
 
       로드중 -> Progressbar(로드 중인 상태 표시)
-
 
 
 
