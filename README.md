@@ -122,7 +122,7 @@ com.example.githubsearchapp
 
       editText의 TextWatcher를 사용해서 값을 입력할때마다 Observable의 onNext로 발행합니다. (debounce를 사용해서 500ms내에 발생한 마지막 데이터로 제한합니다.) 
 
-      새로운 검색 쿼리를 입력하면 맨위로 scroll되고, 검색결과가 나타나면 키보드가 내려줍니다. 
+      새로운 검색 쿼리를 입력하면 맨위로 scroll 됩니다. 그리고 검색 결과를 스크롤 할때 키보드가 hide되며 editText의 focus를 clear해줍니다.  
 
     - MainPagingAdapter
 
@@ -144,4 +144,4 @@ com.example.githubsearchapp
 
 ## 📱 Result
 
-![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/53978090/148753198-607cad47-627e-49d1-afd6-4124861084c2.gif)
+![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/53978090/148769607-01f23efc-84e6-49b3-8213-a96b46cf5d38.gif)
