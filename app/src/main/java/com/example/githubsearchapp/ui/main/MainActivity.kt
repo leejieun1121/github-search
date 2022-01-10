@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.RecyclerView
 import com.example.githubsearchapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.Observable
@@ -46,13 +48,20 @@ class MainActivity : AppCompatActivity() {
         binding.rvMain.adapter = mainPagingAdapter.withLoadStateFooter(
             footer = LoadStateAdapter { mainPagingAdapter.retry() }
         )
-        mainPagingAdapter.addLoadStateListener { loadState ->
-            if(loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0){
-                binding.tvNothing.isVisible = true
-            }else{
-                binding.tvNothing.isVisible = false
+
+        binding.rvMain.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
                 imm.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
+                binding.etSearch.clearFocus()
+                return false
             }
+
+            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
+            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+        })
+
+        mainPagingAdapter.addLoadStateListener { loadState ->
+            binding.tvNothing.isVisible = loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0
         }
 
         val editTextObservable = Observable.create { emitter: ObservableEmitter<String>? ->
