@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -15,21 +16,18 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubsearchapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.ObservableEmitter
-import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
+@FlowPreview
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var imm:InputMethodManager
+    private lateinit var imm: InputMethodManager
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var mainPagingAdapter: MainPagingAdapter
@@ -61,47 +59,51 @@ class MainActivity : AppCompatActivity() {
         })
 
         mainPagingAdapter.addLoadStateListener { loadState ->
-            binding.tvNothing.isVisible = loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0
+            binding.tvNothing.isVisible =
+                loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0
         }
 
-        val editTextObservable = Observable.create { emitter: ObservableEmitter<String>? ->
-            binding.etSearch.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    before: Int,
-                    count: Int,
-                ) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s.toString().isEmpty()) {
-                        mainPagingAdapter.submitData(lifecycle, PagingData.empty())
-                    }
-                    emitter?.onNext(s.toString())
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                }
-            })
-        }.debounce(500, TimeUnit.MICROSECONDS)
-            .subscribeOn(Schedulers.io())
-
-        editTextObservable.subscribe { query -> search(query) }
-    }
-
-    private fun search(query: String) {
         lifecycleScope.launch {
             mainPagingAdapter.loadStateFlow
                 .distinctUntilChangedBy { it.refresh }
                 .filter { it.refresh is LoadState.NotLoading }
                 .collect { binding.rvMain.scrollToPosition(0) }
         }
-
         lifecycleScope.launch {
-            viewModel.getRepoList(query).collectLatest {
-                mainPagingAdapter.submitData(it)
-            }
+            binding.etSearch.getQueryTextChangeStateFlow()
+                .debounce(500)
+                .flatMapLatest { query ->
+                    viewModel.getRepoList(query)
+                }.collectLatest {
+                    mainPagingAdapter.submitData(it)
+                }
         }
+    }
+
+    private fun EditText.getQueryTextChangeStateFlow(): StateFlow<String> {
+        val query = MutableStateFlow("")
+
+        addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int,
+            ) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s.toString().isEmpty()) {
+                    mainPagingAdapter.submitData(lifecycle, PagingData.empty())
+                } else {
+                    query.value = s.toString()
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+        })
+        return query
     }
 }
