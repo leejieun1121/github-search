@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         mainPagingAdapter.addLoadStateListener { loadState ->
             binding.tvNothing.isVisible =
-                loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0
+                loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0 && binding.etSearch.text.isNotEmpty()
         }
 
         lifecycleScope.launch {
