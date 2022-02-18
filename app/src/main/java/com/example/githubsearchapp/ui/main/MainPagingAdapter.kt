@@ -5,10 +5,6 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
-import com.example.githubsearchapp.R
 import com.example.githubsearchapp.data.vo.Repo
 import com.example.githubsearchapp.databinding.ItemMainBinding
 
@@ -47,17 +43,8 @@ class MainPagingAdapter : PagingDataAdapter<Repo, MainPagingAdapter.MainViewHold
 
     private fun MainViewHolder.bind(item: Repo) {
         binding.apply {
-            Glide.with(imgUser.context)
-                .load(item.owner.avatarUrl)
-                .apply(RequestOptions()
-                    .transform(RoundedCorners(20))
-                    .placeholder(R.drawable.loading_animation)
-                    .error(R.drawable.ic_broken_image))
-                .into(imgUser)
-            tvName.text = item.name
-            tvLanguage.text = item.language
-            tvDescription.text = item.description
-            tvStarCount.text = item.starCount.toString()
+            repo = item
+            executePendingBindings()
         }
     }
 

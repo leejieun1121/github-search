@@ -10,12 +10,14 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
+import com.example.githubsearchapp.R
 import com.example.githubsearchapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,7 +39,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this@MainActivity
         setContentView(binding.root)
 
         imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -76,9 +80,9 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 binding.etSearch.textChanges()
                     .debounce(500)
-                    .flatMapLatest { query ->
-                        viewModel.getRepoList(query)
-                    }.collectLatest {
+                    .flatMapLatest {
+                        viewModel.getRepoList(it)
+                    }.collectLatest{
                         mainPagingAdapter.submitData(it)
                     }
             }
