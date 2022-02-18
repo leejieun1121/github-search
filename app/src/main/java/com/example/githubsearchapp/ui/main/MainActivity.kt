@@ -10,7 +10,9 @@ import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +20,7 @@ import com.example.githubsearchapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -53,7 +56,6 @@ class MainActivity : AppCompatActivity() {
                 binding.etSearch.clearFocus()
                 return false
             }
-
             override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         })
@@ -69,41 +71,36 @@ class MainActivity : AppCompatActivity() {
                 .filter { it.refresh is LoadState.NotLoading }
                 .collect { binding.rvMain.scrollToPosition(0) }
         }
+
         lifecycleScope.launch {
-            binding.etSearch.getQueryTextChangeStateFlow()
-                .debounce(500)
-                .flatMapLatest { query ->
-                    viewModel.getRepoList(query)
-                }.collectLatest {
-                    mainPagingAdapter.submitData(it)
-                }
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                binding.etSearch.textChanges()
+                    .debounce(500)
+                    .flatMapLatest { query ->
+                        viewModel.getRepoList(query)
+                    }.collectLatest {
+                        mainPagingAdapter.submitData(it)
+                    }
+            }
         }
+
     }
 
-    private fun EditText.getQueryTextChangeStateFlow(): StateFlow<String> {
-        val query = MutableStateFlow("")
-
-        addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int,
-            ) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    @ExperimentalCoroutinesApi
+    private fun EditText.textChanges() = callbackFlow {
+        val listener = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, before: Int, count: Int, ) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
                 if (s.toString().isEmpty()) {
                     mainPagingAdapter.submitData(lifecycle, PagingData.empty())
                 } else {
-                    query.value = s.toString()
+                    trySend(s.toString())
                 }
             }
+        }
+        addTextChangedListener(listener)
+        awaitClose { removeTextChangedListener(listener) }
+    }.onStart { emit(text.toString()) }
 
-            override fun afterTextChanged(s: Editable?) {
-            }
-
-        })
-        return query
-    }
 }

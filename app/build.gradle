@@ -50,6 +50,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.0-alpha02"
 
     implementation "androidx.activity:activity-ktx:1.4.0"
 
@@ -64,7 +65,7 @@ dependencies {
 
     //OkHttp
     implementation "com.squareup.okhttp3:okhttp-bom:4.9.0"
-    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+    implementation "com.squareup.okhttp3:okhttp:4.9.3"
 
     //Paging
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
