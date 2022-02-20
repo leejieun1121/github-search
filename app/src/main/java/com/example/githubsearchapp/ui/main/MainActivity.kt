@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this@MainActivity
-        setContentView(binding.root)
 
         imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         mainPagingAdapter = MainPagingAdapter()
