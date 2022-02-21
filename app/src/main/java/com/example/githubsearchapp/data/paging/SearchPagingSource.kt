@@ -8,7 +8,7 @@ import com.example.githubsearchapp.data.service.SearchService
 import retrofit2.HttpException
 import java.io.IOException
 
-const val STARTING_PAGE_INDEX= 1
+const val STARTING_PAGE_INDEX = 1
 
 class SearchPagingSource(
     private val query: String,
@@ -20,7 +20,7 @@ class SearchPagingSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
-        val position = params.key ?:STARTING_PAGE_INDEX
+        val position = params.key ?: STARTING_PAGE_INDEX
         return try {
             val repos = service.getSearchRepos(query, position, params.loadSize).items
             LoadResult.Page(
@@ -41,7 +41,7 @@ class SearchPagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Repo>): Int? {
-        return state.anchorPosition?.let{anchorPosition->
+        return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }

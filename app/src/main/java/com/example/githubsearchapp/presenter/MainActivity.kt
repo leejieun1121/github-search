@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 binding.etSearch.clearFocus()
                 return false
             }
+
             override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {}
             override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
         })
@@ -81,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                     .debounce(500)
                     .flatMapLatest {
                         viewModel.getRepoList(it)
-                    }.collectLatest{
+                    }.collectLatest {
                         mainPagingAdapter.submitData(it)
                     }
             }
@@ -92,7 +93,14 @@ class MainActivity : AppCompatActivity() {
     @ExperimentalCoroutinesApi
     private fun EditText.textChanges() = callbackFlow {
         val listener = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, before: Int, count: Int, ) {}
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int,
+            ) {
+            }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString().isEmpty()) {
