@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubSearchApp">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".presenter.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

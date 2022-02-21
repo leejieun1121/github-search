@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.ui.main
+package com.example.githubsearchapp.presenter
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -8,14 +8,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.githubsearchapp.R
-import com.example.githubsearchapp.data.vo.Repo
+import com.example.githubsearchapp.domain.model.RepoInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 @BindingAdapter("replaceAll")
-fun RecyclerView.replaceAll(list: PagingData<Repo>?) {
+fun RecyclerView.replaceAll(list: PagingData<RepoInfo>?) {
     CoroutineScope(Dispatchers.IO).launch {
         list?.let {
             (adapter as? MainPagingAdapter)?.submitData(it)

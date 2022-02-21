@@ -1,24 +1,25 @@
-package com.example.githubsearchapp.ui.main
+package com.example.githubsearchapp.presenter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.githubsearchapp.data.vo.Repo
 import com.example.githubsearchapp.databinding.ItemMainBinding
+import com.example.githubsearchapp.domain.model.RepoInfo
 
-class MainPagingAdapter : PagingDataAdapter<Repo, MainPagingAdapter.MainViewHolder>(DIFF_CALLBACK) {
+class MainPagingAdapter :
+    PagingDataAdapter<RepoInfo, MainPagingAdapter.MainViewHolder>(DIFF_CALLBACK) {
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Repo>() {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<RepoInfo>() {
             override fun areItemsTheSame(
-                oldItem: Repo,
-                newItem: Repo,
+                oldItem: RepoInfo,
+                newItem: RepoInfo,
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: Repo,
-                newItem: Repo,
+                oldItem: RepoInfo,
+                newItem: RepoInfo,
             ): Boolean = oldItem == newItem
         }
     }
@@ -41,9 +42,9 @@ class MainPagingAdapter : PagingDataAdapter<Repo, MainPagingAdapter.MainViewHold
         val binding: ItemMainBinding,
     ) : RecyclerView.ViewHolder(binding.root)
 
-    private fun MainViewHolder.bind(item: Repo) {
+    private fun MainViewHolder.bind(item: RepoInfo) {
         binding.apply {
-            repo = item
+            repoInfo = item
             executePendingBindings()
         }
     }

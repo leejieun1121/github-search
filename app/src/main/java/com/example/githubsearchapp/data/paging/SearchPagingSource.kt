@@ -3,16 +3,16 @@ package com.example.githubsearchapp.data.paging
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.githubsearchapp.data.remote.SearchRemoteDataSource
-import com.example.githubsearchapp.data.vo.Repo
+import com.example.githubsearchapp.data.dto.Repo
+import com.example.githubsearchapp.data.service.SearchService
 import retrofit2.HttpException
 import java.io.IOException
 
 const val STARTING_PAGE_INDEX= 1
 
 class SearchPagingSource(
-    private val query:String,
-    private val remote: SearchRemoteDataSource,
+    private val query: String,
+    private val service: SearchService,
 ) : PagingSource<Int, Repo>() {
 
     companion object {
@@ -22,7 +22,7 @@ class SearchPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         val position = params.key ?:STARTING_PAGE_INDEX
         return try {
-            val repos = remote.getSearchRepos(query, position, params.loadSize).items
+            val repos = service.getSearchRepos(query, position, params.loadSize).items
             LoadResult.Page(
                 data = repos,
                 prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,

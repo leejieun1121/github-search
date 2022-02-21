@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.example.githubsearchapp.ui.main.MainViewModel" />
+            type="com.example.githubsearchapp.presenter.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
-        tools:context=".ui.main.MainActivity">
+        tools:context=".presenter.MainActivity">
 
         <EditText
             android:id="@+id/et_search"

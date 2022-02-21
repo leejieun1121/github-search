@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.ui.main
+package com.example.githubsearchapp.presenter
 
 import android.view.ViewGroup
 import androidx.paging.LoadState

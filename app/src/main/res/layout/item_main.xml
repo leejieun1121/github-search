@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="repo"
-            type="com.example.githubsearchapp.data.vo.Repo" />
+            name="repoInfo"
+            type="com.example.githubsearchapp.domain.model.RepoInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_height="80dp"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="20dp"
-            bindImage="@{repo.owner.avatarUrl}"
+            bindImage="@{repoInfo.avatarUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +35,7 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{repo.name}"
+            android:text="@{repoInfo.name}"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
             android:layout_marginBottom="10dp"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="@{repo.description}"
+            android:text="@{repoInfo.description}"
             app:layout_constraintBottom_toTopOf="@+id/img_star"
             app:layout_constraintEnd_toEndOf="@id/tv_name"
             app:layout_constraintStart_toStartOf="@id/tv_name"
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@{repo.starCount.toString()}"
+            android:text="@{repoInfo.starCount.toString()}"
             app:layout_constraintBottom_toBottomOf="@id/img_star"
             app:layout_constraintStart_toEndOf="@id/img_star"
             app:layout_constraintTop_toTopOf="@id/img_star"
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="@{repo.language}"
+            android:text="@{repoInfo.language}"
             app:layout_constraintBottom_toBottomOf="@id/img_language"
             app:layout_constraintStart_toEndOf="@id/img_language"
             app:layout_constraintTop_toTopOf="@id/img_language"
