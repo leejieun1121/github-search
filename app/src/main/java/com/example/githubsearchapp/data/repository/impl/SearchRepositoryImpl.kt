@@ -13,15 +13,15 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
-    private val service: SearchService,
-    @DispatcherModule.DispatcherIO private val ioDispatcher: CoroutineDispatcher,
+    private val service: SearchService
 ) : SearchRepository {
+
     companion object {
         private const val PAGE_SIZE = 10
     }
 
     override fun getSearchRepos(query: String): Flow<PagingData<Repo>> =
         Pager(PagingConfig(PAGE_SIZE)) {
-            SearchPagingSource(query, service, ioDispatcher)
+            SearchPagingSource(query, service)
         }.flow
 }

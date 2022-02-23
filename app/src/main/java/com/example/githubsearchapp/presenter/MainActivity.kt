@@ -70,14 +70,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            mainPagingAdapter.loadStateFlow
-                .distinctUntilChangedBy { it.refresh }
-                .filter { it.refresh is LoadState.NotLoading }
-                .collect { binding.rvMain.scrollToPosition(0) }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainPagingAdapter.loadStateFlow
+                    .distinctUntilChangedBy { it.refresh }
+                    .filter { it.refresh is LoadState.NotLoading }
+                    .collect { binding.rvMain.scrollToPosition(0) }
+            }
         }
 
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 binding.etSearch.textChanges()
                     .debounce(500)
                     .flatMapLatest {

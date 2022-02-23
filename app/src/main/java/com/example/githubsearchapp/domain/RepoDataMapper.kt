@@ -6,9 +6,9 @@ import com.example.githubsearchapp.domain.model.RepoInfo
 fun Repo.toRepoInfo() = RepoInfo(
     id = id,
     name = name,
-    description = description,
-    starCount = starCount,
-    language = language,
+    description = description ?: "",
+    starCount = starCount ?: 0,
+    language = language ?: "",
     avatarUrl = owner.avatarUrl
 )
 

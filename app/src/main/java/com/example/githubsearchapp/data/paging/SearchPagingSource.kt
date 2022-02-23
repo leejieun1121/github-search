@@ -15,8 +15,7 @@ const val STARTING_PAGE_INDEX = 1
 
 class SearchPagingSource(
     private val query: String,
-    private val service: SearchService,
-    @DispatcherModule.DispatcherIO private val ioDispatcher: CoroutineDispatcher,
+    private val service: SearchService
 ) : PagingSource<Int, Repo>() {
 
     companion object {
@@ -26,9 +25,7 @@ class SearchPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         val position = params.key ?: STARTING_PAGE_INDEX
         return try {
-            val repos = withContext(ioDispatcher) {
-                service.getSearchRepos(query, position, params.loadSize).items
-            }
+            val repos = service.getSearchRepos(query, position, params.loadSize).items
             LoadResult.Page(
                 data = repos,
                 prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
