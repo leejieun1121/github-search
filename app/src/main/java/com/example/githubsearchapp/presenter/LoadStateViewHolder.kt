@@ -2,7 +2,7 @@ package com.example.githubsearchapp.presenter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubsearchapp.R
@@ -18,20 +18,17 @@ class LoadStateViewHolder(
     }
 
     fun bind(loadState: LoadState) {
-        if (loadState is LoadState.Error) {
-            binding.tvError.text = loadState.error.localizedMessage
-        }
-        binding.progressBar.isVisible = loadState is LoadState.Loading
-        binding.btnRetry.isVisible = loadState is LoadState.Error
-        binding.tvError.isVisible = loadState is LoadState.Error
+        binding.loadState = loadState
     }
 
     companion object {
         fun create(parent: ViewGroup, retry: () -> Unit): LoadStateViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_load_state_footer, parent, false)
-            val binding = ItemLoadStateFooterBinding.bind(view)
-            return LoadStateViewHolder(binding, retry)
+            return LoadStateViewHolder(DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                R.layout.item_load_state_footer,
+                parent,
+                false
+            ), retry)
         }
     }
 }

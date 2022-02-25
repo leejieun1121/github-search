@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.viewModel = viewModel
         binding.lifecycleOwner = this@MainActivity
 
         imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

@@ -1,7 +1,13 @@
 package com.example.githubsearchapp.presenter
 
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -33,5 +39,21 @@ fun ImageView.bindImage(imgUrl: String?) {
                 .placeholder(R.drawable.loading_animation)
                 .error(R.drawable.ic_broken_image))
             .into(this)
+    }
+}
+
+@BindingAdapter("setErrorMsg")
+fun TextView.setErrorMsg(loadState: LoadState) {
+    if (loadState is LoadState.Error) {
+        this.text = loadState.error.localizedMessage
+    }
+}
+
+@BindingAdapter("setVisibility")
+fun View.setVisibility(loadState: LoadState) {
+    when (this) {
+        is ProgressBar -> this.isVisible = loadState is LoadState.Loading
+        is Button -> this.isVisible = loadState is LoadState.Error
+        is TextView -> this.isVisible = loadState is LoadState.Error
     }
 }

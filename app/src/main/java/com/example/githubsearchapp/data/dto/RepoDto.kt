@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 data class RepoDto(
     @SerializedName("total_count") val count: Int,
     @SerializedName("incomplete_results") val result: Boolean,
-    @SerializedName("items") val items: List<Repo> = emptyList(),
+    @SerializedName("items") val items: List<Repo>,
 )
 
 @Keep

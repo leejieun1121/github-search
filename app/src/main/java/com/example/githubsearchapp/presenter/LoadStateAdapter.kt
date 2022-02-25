@@ -9,6 +9,7 @@ typealias retry = () -> Unit
 class LoadStateAdapter(
     private val retry: retry,
 ) : LoadStateAdapter<LoadStateViewHolder>() {
+
     override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
         holder.bind(loadState)
     }
