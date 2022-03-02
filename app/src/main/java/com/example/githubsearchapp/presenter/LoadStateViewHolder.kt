@@ -10,7 +10,7 @@ import com.example.githubsearchapp.databinding.ItemLoadStateFooterBinding
 
 class LoadStateViewHolder(
     private val binding: ItemLoadStateFooterBinding,
-    retry: () -> Unit,
+    retry: retry,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {

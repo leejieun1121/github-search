@@ -2,20 +2,17 @@ package com.example.githubsearchapp.presenter
 
 import android.app.Activity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubsearchapp.R
 import com.example.githubsearchapp.databinding.ActivityMainBinding
@@ -79,40 +76,29 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                binding.etSearch.textChanges()
+                textChanges()
                     .debounce(500)
-                    .flatMapLatest {
-                        viewModel.getRepoList(it)
-                    }.collectLatest {
-                        mainPagingAdapter.submitData(it)
+                    .collectLatest { keyword ->
+                        viewModel.getRepoList(keyword)
                     }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.repoList.collectLatest { repoInfo ->
+                    mainPagingAdapter.submitData(repoInfo)
+                }
             }
         }
 
     }
 
-    @ExperimentalCoroutinesApi
-    private fun EditText.textChanges() = callbackFlow {
-        val listener = object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int,
-            ) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                if (s.toString().isEmpty()) {
-                    mainPagingAdapter.submitData(lifecycle, PagingData.empty())
-                } else {
-                    trySend(s.toString())
-                }
-            }
+    private fun textChanges() = callbackFlow {
+        val listener = binding.etSearch.doAfterTextChanged { keyword ->
+            trySend(keyword.toString())
         }
-        addTextChangedListener(listener)
-        awaitClose { removeTextChangedListener(listener) }
-    }.onStart { emit(text.toString()) }
+        awaitClose { binding.etSearch.removeTextChangedListener(listener) }
+    }
 
 }
