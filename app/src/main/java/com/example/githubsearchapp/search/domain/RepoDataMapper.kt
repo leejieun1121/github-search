@@ -1,7 +1,7 @@
-package com.example.githubsearchapp.domain
+package com.example.githubsearchapp.search.domain
 
-import com.example.githubsearchapp.data.dto.Repo
-import com.example.githubsearchapp.domain.model.RepoInfo
+import com.example.githubsearchapp.search.data.dto.Repo
+import com.example.githubsearchapp.search.domain.model.RepoInfo
 
 fun Repo.toRepoInfo() = RepoInfo(
     id = id,

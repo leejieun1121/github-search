@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.di
+package com.example.githubsearchapp.search.di
 
 import dagger.Module
 import dagger.Provides

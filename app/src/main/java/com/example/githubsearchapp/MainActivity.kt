@@ -1,8 +1,7 @@
-package com.example.githubsearchapp.presenter
+package com.example.githubsearchapp
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.githubsearchapp.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

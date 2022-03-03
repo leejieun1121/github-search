@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.presenter
+package com.example.githubsearchapp.search.presenter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.githubsearchapp.R
 import com.example.githubsearchapp.databinding.ItemMainBinding
-import com.example.githubsearchapp.domain.model.RepoInfo
+import com.example.githubsearchapp.search.domain.model.RepoInfo
 
 class MainPagingAdapter
     : PagingDataAdapter<RepoInfo, MainViewHolder>(DIFF_CALLBACK) {

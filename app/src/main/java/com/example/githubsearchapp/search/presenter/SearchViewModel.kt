@@ -1,17 +1,17 @@
-package com.example.githubsearchapp.presenter
+package com.example.githubsearchapp.search.presenter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import com.example.githubsearchapp.domain.RepoFlowUseCase
-import com.example.githubsearchapp.domain.model.RepoInfo
+import com.example.githubsearchapp.search.domain.RepoFlowUseCase
+import com.example.githubsearchapp.search.domain.model.RepoInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class SearchViewModel @Inject constructor(
     private val repoFlowUseCase: RepoFlowUseCase,
 ) : ViewModel() {
 

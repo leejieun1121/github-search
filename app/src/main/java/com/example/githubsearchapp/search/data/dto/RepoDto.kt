@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.data.dto
+package com.example.githubsearchapp.search.data.dto
 
 import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName

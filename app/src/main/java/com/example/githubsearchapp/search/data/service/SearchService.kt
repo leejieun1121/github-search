@@ -1,6 +1,6 @@
-package com.example.githubsearchapp.data.service
+package com.example.githubsearchapp.search.data.service
 
-import com.example.githubsearchapp.data.dto.RepoDto
+import com.example.githubsearchapp.search.data.dto.RepoDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 

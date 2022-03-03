@@ -1,13 +1,10 @@
-package com.example.githubsearchapp.data.paging
+package com.example.githubsearchapp.search.data.paging
 
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.githubsearchapp.data.dto.Repo
-import com.example.githubsearchapp.data.service.SearchService
-import com.example.githubsearchapp.di.DispatcherModule
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
+import com.example.githubsearchapp.search.data.dto.Repo
+import com.example.githubsearchapp.search.data.service.SearchService
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -15,7 +12,7 @@ const val STARTING_PAGE_INDEX = 1
 
 class SearchPagingSource(
     private val query: String,
-    private val service: SearchService
+    private val service: SearchService,
 ) : PagingSource<Int, Repo>() {
 
     companion object {

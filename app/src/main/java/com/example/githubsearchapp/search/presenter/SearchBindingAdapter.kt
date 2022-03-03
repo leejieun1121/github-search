@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.presenter
+package com.example.githubsearchapp.search.presenter
 
 import android.view.View
 import android.widget.Button
@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.example.githubsearchapp.R
-import com.example.githubsearchapp.domain.model.RepoInfo
+import com.example.githubsearchapp.search.domain.model.RepoInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

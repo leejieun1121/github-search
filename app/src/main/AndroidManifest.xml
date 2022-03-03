@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:name=".SearchApplication"
+        android:name=".MainApplication"
         android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GithubSearchApp">
         <activity
-            android:name=".presenter.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

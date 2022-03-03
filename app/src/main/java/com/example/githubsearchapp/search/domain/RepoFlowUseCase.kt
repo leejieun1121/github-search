@@ -1,8 +1,8 @@
-package com.example.githubsearchapp.domain
+package com.example.githubsearchapp.search.domain
 
 import androidx.paging.map
-import com.example.githubsearchapp.data.repository.SearchRepository
-import com.example.githubsearchapp.di.DispatcherModule
+import com.example.githubsearchapp.search.data.repository.SearchRepository
+import com.example.githubsearchapp.search.di.DispatcherModule
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map

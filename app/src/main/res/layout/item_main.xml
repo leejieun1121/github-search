@@ -7,7 +7,7 @@
 
         <variable
             name="repoInfo"
-            type="com.example.githubsearchapp.domain.model.RepoInfo" />
+            type="com.example.githubsearchapp.search.domain.model.RepoInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

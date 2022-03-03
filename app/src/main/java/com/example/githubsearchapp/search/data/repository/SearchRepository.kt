@@ -1,7 +1,7 @@
-package com.example.githubsearchapp.data.repository
+package com.example.githubsearchapp.search.data.repository
 
 import androidx.paging.PagingData
-import com.example.githubsearchapp.data.dto.Repo
+import com.example.githubsearchapp.search.data.dto.Repo
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {

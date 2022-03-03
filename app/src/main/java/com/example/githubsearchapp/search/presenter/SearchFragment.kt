@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.presenter
+package com.example.githubsearchapp.search.presenter
 
 import android.app.Activity
 import android.os.Bundle
@@ -34,7 +34,7 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private lateinit var imm: InputMethodManager
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: SearchViewModel by viewModels()
 
     private lateinit var mainPagingAdapter: MainPagingAdapter
 

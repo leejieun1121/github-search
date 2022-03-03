@@ -1,8 +1,8 @@
-package com.example.githubsearchapp.di
+package com.example.githubsearchapp.search.di
 
-import com.example.githubsearchapp.data.repository.SearchRepository
-import com.example.githubsearchapp.data.repository.impl.SearchRepositoryImpl
-import com.example.githubsearchapp.data.service.SearchService
+import com.example.githubsearchapp.search.data.repository.SearchRepository
+import com.example.githubsearchapp.search.data.repository.impl.SearchRepositoryImpl
+import com.example.githubsearchapp.search.data.service.SearchService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

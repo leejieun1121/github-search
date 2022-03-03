@@ -1,4 +1,4 @@
-package com.example.githubsearchapp.domain.model
+package com.example.githubsearchapp.search.domain.model
 
 data class RepoInfo(
     val id: Int,
