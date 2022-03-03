@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/ic_broken_image.xml" value="0.1296875" />
         <entry key="app/src/main/res/drawable/loading_img.xml" value="0.1296875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.10245901639344263" />
+        <entry key="app/src/main/res/layout/fragment_search.xml" value="0.1" />
         <entry key="app/src/main/res/layout/ite_load_state_footer.xml" value="0.1" />
         <entry key="app/src/main/res/layout/item_load_state_footer.xml" value="0.10009057971014493" />
         <entry key="app/src/main/res/layout/item_main.xml" value="0.375" />
