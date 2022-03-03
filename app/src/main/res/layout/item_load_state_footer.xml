@@ -2,13 +2,9 @@
 <layout>
 
     <data>
-
         <variable
             name="loadState"
             type="androidx.paging.LoadState" />
-
-        <import type="android.view.View" />
-
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

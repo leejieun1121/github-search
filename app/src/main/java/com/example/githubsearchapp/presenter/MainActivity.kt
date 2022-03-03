@@ -2,8 +2,10 @@ package com.example.githubsearchapp.presenter
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -88,6 +90,14 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.repoList.collectLatest { repoInfo ->
                     mainPagingAdapter.submitData(repoInfo)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.error.collectLatest { message ->
+                    Toast.makeText(this@MainActivity,message,Toast.LENGTH_SHORT).show()
                 }
             }
         }

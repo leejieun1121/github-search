@@ -3,13 +3,10 @@ package com.example.githubsearchapp.presenter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.example.githubsearchapp.domain.RepoFlowUseCase
 import com.example.githubsearchapp.domain.model.RepoInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,11 +18,21 @@ class MainViewModel @Inject constructor(
     private val _repoList = MutableStateFlow<PagingData<RepoInfo>>(PagingData.empty())
     val repoList = _repoList.asStateFlow()
 
+    private val _error = MutableSharedFlow<String>()
+    val error = _error.asSharedFlow()
+
     fun getRepoList(query: String) {
         viewModelScope.launch {
-            repoFlowUseCase(query)
-                .cachedIn(viewModelScope)
-                .collectLatest { _repoList.emit(it) }
+            runCatching {
+                repoFlowUseCase(query)
+            }.onSuccess { repoFlow ->
+                repoFlow.collectLatest { repoInfo ->
+                    _repoList.emit(repoInfo)
+                }
+            }.onFailure { error ->
+                _error.emit(error.toString())
+            }
         }
     }
+
 }
