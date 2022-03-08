@@ -59,41 +59,6 @@ com.example.githubsearchapp
 ~~~
 
 
-~~~
-com.example.githubsearchapp
-├── MainActivity.kt
-├── MainApplication.kt
-└── search
-    ├── data
-    │   ├── dto
-    │   │   └── RepoDto.kt
-    │   ├── paging
-    │   │   └── SearchPagingSource.kt
-    │   ├── repository
-    │   │   ├── SearchRepository.kt
-    │   │   └── impl
-    │   │       └── SearchRepositoryImpl.kt
-    │   └── service
-    │       └── SearchService.kt
-    ├── di
-    │   ├── DispatcherModule.kt
-    │   └── ServiceModule.kt
-    ├── domain
-    │   ├── RepoDataMapper.kt
-    │   ├── RepoFlowUseCase.kt
-    │   └── model
-    │       └── RepoInfo.kt
-    └── presenter
-        ├── LoadStateAdapter.kt
-        ├── LoadStateViewHolder.kt
-        ├── SearchBindingAdapter.kt
-        ├── SearchFragment.kt
-        ├── SearchPagingAdapter.kt
-        └── SearchViewModel.kt
-~~~
-
-
-
 - **data**   
 
   - paging
