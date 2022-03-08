@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
@@ -32,7 +31,9 @@ import kotlinx.coroutines.launch
 @FlowPreview
 class SearchFragment : Fragment() {
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var imm: InputMethodManager
     private val viewModel: SearchViewModel by viewModels()
 
@@ -42,14 +43,20 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
+        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         imm =
             requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         mainPagingAdapter = MainPagingAdapter()
+
         setupViews()
-        return binding.root
+        collectFlows()
     }
 
     private fun setupViews() {
@@ -73,41 +80,34 @@ class SearchFragment : Fragment() {
                 loadState.refresh is LoadState.NotLoading && mainPagingAdapter.itemCount == 0 && binding.etSearch.text.isNotEmpty()
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainPagingAdapter.loadStateFlow
-                    .distinctUntilChangedBy { it.refresh }
-                    .filter { it.refresh is LoadState.NotLoading }
-                    .collect { binding.rvMain.scrollToPosition(0) }
-            }
-        }
+    }
 
+    private fun collectFlows() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                textChanges()
-                    .debounce(500)
-                    .collectLatest { keyword ->
-                        viewModel.getRepoList(keyword)
+
+                launch {
+                    mainPagingAdapter.loadStateFlow
+                        .distinctUntilChangedBy { it.refresh }
+                        .filter { it.refresh is LoadState.NotLoading }
+                        .collect { binding.rvMain.scrollToPosition(0) }
+                }
+
+                launch {
+                    textChanges()
+                        .debounce(500)
+                        .collectLatest { keyword ->
+                            viewModel.getRepoList(keyword)
+                        }
+                }
+
+                launch {
+                    viewModel.repoList.collectLatest { repoInfo ->
+                        mainPagingAdapter.submitData(repoInfo)
                     }
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.repoList.collectLatest { repoInfo ->
-                    mainPagingAdapter.submitData(repoInfo)
                 }
             }
         }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.error.collectLatest { message ->
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
     }
 
     private fun textChanges() = callbackFlow {
@@ -115,5 +115,10 @@ class SearchFragment : Fragment() {
             trySend(keyword.toString())
         }
         awaitClose { binding.etSearch.removeTextChangedListener(listener) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

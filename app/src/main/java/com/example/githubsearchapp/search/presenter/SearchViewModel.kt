@@ -6,7 +6,9 @@ import androidx.paging.PagingData
 import com.example.githubsearchapp.search.domain.RepoFlowUseCase
 import com.example.githubsearchapp.search.domain.model.RepoInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,20 +20,10 @@ class SearchViewModel @Inject constructor(
     private val _repoList = MutableStateFlow<PagingData<RepoInfo>>(PagingData.empty())
     val repoList = _repoList.asStateFlow()
 
-    private val _error = MutableSharedFlow<String>()
-    val error = _error.asSharedFlow()
-
     fun getRepoList(query: String) {
         viewModelScope.launch {
-            runCatching {
-                repoFlowUseCase(query)
-            }.onSuccess { repoFlow ->
-                repoFlow.collectLatest { repoInfo ->
-                    _repoList.emit(repoInfo)
-                }
-            }.onFailure { error ->
-                _error.emit(error.toString())
-            }
+            repoFlowUseCase(query)
+                .collectLatest { repoInfo -> _repoList.emit(repoInfo) }
         }
     }
 
