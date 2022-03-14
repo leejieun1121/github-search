@@ -3,6 +3,7 @@ package com.example.githubsearchapp.search.presenter
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.githubsearchapp.search.domain.RepoFlowUseCase
 import com.example.githubsearchapp.search.domain.model.RepoInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ class SearchViewModel @Inject constructor(
     fun getRepoList(query: String) {
         viewModelScope.launch {
             repoFlowUseCase(query)
+                .cachedIn(viewModelScope)
                 .collectLatest { repoInfo -> _repoList.emit(repoInfo) }
         }
     }

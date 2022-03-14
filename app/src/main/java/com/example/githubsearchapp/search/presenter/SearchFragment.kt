@@ -20,19 +20,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.githubsearchapp.R
 import com.example.githubsearchapp.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @ExperimentalCoroutinesApi
 @FlowPreview
 class SearchFragment : Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentSearchBinding
 
     private lateinit var imm: InputMethodManager
     private val viewModel: SearchViewModel by viewModels()
@@ -43,7 +40,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -86,26 +83,33 @@ class SearchFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
 
-                launch {
-                    mainPagingAdapter.loadStateFlow
-                        .distinctUntilChangedBy { it.refresh }
-                        .filter { it.refresh is LoadState.NotLoading }
-                        .collect { binding.rvMain.scrollToPosition(0) }
-                }
+                val handler = CoroutineExceptionHandler { _, e -> println("Caught $e") }
+                supervisorScope {
+                    launch(handler) {
+                        mainPagingAdapter.loadStateFlow
+                            .distinctUntilChangedBy { it.refresh }
+                            .filter { it.refresh is LoadState.NotLoading }
+                            .collect {
+                                binding.rvMain.scrollToPosition(0)
+                            }
 
-                launch {
-                    textChanges()
-                        .debounce(500)
-                        .collectLatest { keyword ->
-                            viewModel.getRepoList(keyword)
+                    }
+
+                    launch(handler) {
+                        textChanges()
+                            .debounce(500)
+                            .collectLatest { keyword ->
+                                viewModel.getRepoList(keyword)
+                            }
+                    }
+
+                    launch(handler) {
+                        viewModel.repoList.collectLatest { repoInfo ->
+                            mainPagingAdapter.submitData(repoInfo)
                         }
-                }
-
-                launch {
-                    viewModel.repoList.collectLatest { repoInfo ->
-                        mainPagingAdapter.submitData(repoInfo)
                     }
                 }
+
             }
         }
     }
@@ -117,8 +121,4 @@ class SearchFragment : Fragment() {
         awaitClose { binding.etSearch.removeTextChangedListener(listener) }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 }
