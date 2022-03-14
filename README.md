@@ -59,9 +59,6 @@ com.example.githubsearchapp
 ~~~
 
 
-
-
-
 - **data**   
 
   - paging
